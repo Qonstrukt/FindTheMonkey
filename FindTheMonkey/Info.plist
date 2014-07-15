@@ -19,6 +19,11 @@
 		<string>Icon-60@2x</string>
 		<string>Icon-76@2x</string>
 		<string>Icon-76</string>
+		<string>Icon</string>
+		<string>Icon@2x</string>
+		<string>Icon-Small</string>
+		<string>Icon-Small@2x</string>
+		<string>Icon-Small-40@2x</string>
 	</array>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
