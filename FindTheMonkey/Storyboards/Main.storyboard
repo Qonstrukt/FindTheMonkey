@@ -8,30 +8,40 @@
         <scene sceneID="CZe-zN-tTe">
             <objects>
                 <tableViewController id="88d-pt-gUc" customClass="BeaconsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="nOz-Cg-VTc">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="nOz-Cg-VTc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BeaconCell" id="AR4-KK-PA2">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="119" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AR4-KK-PA2" id="Nhj-ct-Bgo">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label appearanceType="aqua" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Beacon name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N18-5w-c3s">
-                                            <rect key="frame" x="15" y="11" width="106" height="21"/>
+                                        <label appearanceType="aqua" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Beacon name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N18-5w-c3s">
+                                            <rect key="frame" x="15" y="11" width="139" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <slider appearanceType="aqua" opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="E0v-Gp-ggh">
-                                            <rect key="frame" x="146" y="7" width="161" height="31"/>
+                                        <slider appearanceType="aqua" opaque="NO" tag="2" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="E0v-Gp-ggh">
+                                            <rect key="frame" x="164" y="7" width="143" height="31"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </slider>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="N18-5w-c3s" firstAttribute="leading" secondItem="Nhj-ct-Bgo" secondAttribute="leading" constant="15" id="6TZ-fq-qWa"/>
+                                        <constraint firstItem="E0v-Gp-ggh" firstAttribute="top" secondItem="Nhj-ct-Bgo" secondAttribute="top" constant="7" id="9pN-gi-Q3X"/>
+                                        <constraint firstAttribute="bottom" secondItem="E0v-Gp-ggh" secondAttribute="bottom" constant="6" id="Dds-uu-wFg"/>
+                                        <constraint firstAttribute="trailing" secondItem="E0v-Gp-ggh" secondAttribute="trailing" constant="15" id="bBq-8c-os8"/>
+                                        <constraint firstItem="E0v-Gp-ggh" firstAttribute="leading" secondItem="N18-5w-c3s" secondAttribute="trailing" constant="12" id="dnn-eq-dl1"/>
+                                        <constraint firstItem="N18-5w-c3s" firstAttribute="width" secondItem="E0v-Gp-ggh" secondAttribute="width" id="eis-aY-fDb"/>
+                                        <constraint firstAttribute="bottom" secondItem="N18-5w-c3s" secondAttribute="bottom" constant="11" id="gmQ-wZ-TTs"/>
+                                        <constraint firstItem="N18-5w-c3s" firstAttribute="top" secondItem="Nhj-ct-Bgo" secondAttribute="top" constant="11" id="wms-5F-vm2"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>

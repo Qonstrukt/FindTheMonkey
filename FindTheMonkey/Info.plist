@@ -30,10 +30,10 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>2014062600</string>
+	<string>2014071500</string>
 	<key>CFBundleDisplayName</key>
 	<string>Freshheads</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.freshheads.location</string>
+	<string>com.freshheads.internal</string>
 </dict>
 </plist>
