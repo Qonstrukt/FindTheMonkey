@@ -5,16 +5,20 @@ using Freshheads.Library;
 
 namespace FindTheMonkey
 {
-	[JsonObject(MemberSerialization.OptIn)]
+	[JsonObject (MemberSerialization.OptIn)]
 	public class EstimoteLocation : BaseModel
 	{
-		[JsonProperty("department")]
+		[JsonProperty ("department")]
 		public string Department { get; set; }
 
-		[JsonProperty("members")]
+		[JsonProperty ("members")]
 		public List<DepartmentMember> Members { get; set; }
+
+
+		public override string ToString ()
+		{
+			return Department;
+		}
 	}
-
-
 }
 

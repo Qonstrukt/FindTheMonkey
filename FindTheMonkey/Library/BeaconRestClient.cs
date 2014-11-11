@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Net.Http;
-
-using Freshheads.Library;
 using System.Threading.Tasks;
+
+using Freshheads.Library.Rest;
 
 namespace FindTheMonkey
 {
-	public class EstimoteAPI : RestAPI
+	public class BeaconRestClient : RestClient
 	{
 		protected override string BaseURL {
 			get {
@@ -14,12 +14,12 @@ namespace FindTheMonkey
 			}
 		}
 
-		static private EstimoteAPI _sharedInstance;
-		static public EstimoteAPI SharedInstance
-		{
+		static private BeaconRestClient _sharedInstance;
+
+		static public BeaconRestClient SharedInstance {
 			get {
 				if (_sharedInstance == null) {
-					_sharedInstance = new EstimoteAPI ();
+					_sharedInstance = new BeaconRestClient ();
 				}
 				return _sharedInstance;
 			}

@@ -13,7 +13,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>7.0</string>
+	<string>8.1</string>
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>Icon-60@2x</string>
@@ -28,10 +28,21 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>2014071500</string>
+	<string>2014111100</string>
 	<key>CFBundleDisplayName</key>
 	<string>Freshheads</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.freshheads.internal</string>
+	<key>UILaunchStoryboardName</key>
+	<string>Launch</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+		<string>bluetooth-central</string>
+	</array>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We willen je graag informeren wanneer je bij Freshheads binnen bent.</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 </dict>
 </plist>

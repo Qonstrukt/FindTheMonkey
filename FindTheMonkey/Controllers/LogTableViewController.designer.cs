@@ -11,8 +11,8 @@ using System.CodeDom.Compiler;
 
 namespace FindTheMonkey
 {
-	[Register ("BeaconsTableViewController")]
-	partial class BeaconsTableViewController
+	[Register ("LogTableViewController")]
+	partial class LogTableViewController
 	{
 		void ReleaseDesignerOutlets ()
 		{
