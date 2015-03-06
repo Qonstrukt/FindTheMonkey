@@ -1,11 +1,11 @@
 using System;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
-using System.CodeDom.Compiler;
+
+using Foundation;
+using UIKit;
 
 namespace FindTheMonkey
 {
-	partial class LogTableViewController : UITableViewController
+	public partial class LogTableViewController : UITableViewController
 	{
 		public LogTableViewController (IntPtr handle) : base (handle)
 		{

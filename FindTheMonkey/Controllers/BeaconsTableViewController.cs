@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using MonoTouch.CoreLocation;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using CoreLocation;
+using Foundation;
+using UIKit;
 
 namespace FindTheMonkey
 {
-	public partial class BeaconsTableViewController : UITableViewController
+	public partial class BeaconsTableViewController : UITableViewController, IBeaconManagerDelegate
 	{
 		public BeaconsTableViewController (IntPtr handle) : base (handle)
 		{
@@ -18,21 +18,17 @@ namespace FindTheMonkey
 		{
 			base.ViewDidLoad ();
 
-			BeaconManager.BeaconUpdated += HandleBeaconUpdated;
-			BeaconManager.BeaconsUpdated += HandleBeaconsUpdated;
-			BeaconManager.MonitoringStarted += HandleMonitoringStarted;
-			BeaconManager.MonitoringFailed += HandleMonitoringFailed;
-			BeaconManager.Initialize ();
+			BeaconManager.Delegate = this;
 		}
 
-		public override int NumberOfSections (UITableView tableView)
+		public override nint NumberOfSections (UITableView tableView)
 		{
 			return 1;
 		}
 
-		public override int RowsInSection (UITableView tableview, int section)
+		public override nint RowsInSection (UITableView tableview, nint section)
 		{
-			return BeaconManager.Beacons.Count;
+			return BeaconManager.RangedBeacons.Count;
 		}
 
 		public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
@@ -42,15 +38,14 @@ namespace FindTheMonkey
 			var beaconLabel = cell.ViewWithTag (1) as UILabel;
 			var beaconProximity = cell.ViewWithTag (2) as UISlider;
 
-			var beacon = BeaconManager.Beacons.ElementAt (indexPath.Row);
-			var proximity = BeaconManager.Proximities.ElementAt (indexPath.Row);
+			var beacon = BeaconManager.RangedBeacons.ElementAt (indexPath.Row);
 
 			beaconLabel.Text = beacon.Value.ToString ();
 
 			beaconProximity.MinValue = 0;
 			beaconProximity.MaxValue = 3;
 
-			switch (proximity.Value) {
+			switch (beacon.Value.Proximity) {
 			case CLProximity.Unknown:
 				beaconProximity.SetValue (0, true);
 				break;
@@ -73,15 +68,25 @@ namespace FindTheMonkey
 
 		private void ReloadNavigationTitle ()
 		{
-			NavigationItem.Title = BeaconManager.CurrentLocation == null ? "Geen beacon binnen bereik" : BeaconManager.CurrentLocation.ToString ();
+//			NavigationItem.Title = BeaconManager.CurrentLocation == null ? "Geen beacon binnen bereik" : BeaconManager.CurrentLocation.ToString ();
 		}
 
-		private void HandleMonitoringFailed (object sender, EventArgs e)
+
+		#region IBeaconManagerDelegate implementation
+
+		public void BeaconUpdated (int beaconIndex)
 		{
-			NavigationItem.RightBarButtonItem = null;
+			TableView.ReloadRows (new [] { NSIndexPath.FromRowSection (beaconIndex, 0) }, UITableViewRowAnimation.Automatic);
+
+			ReloadNavigationTitle ();
 		}
 
-		private void HandleMonitoringStarted (object sender, EventArgs e)
+		public void BeaconsRanged (CLBeacon[] beacons, CLBeaconRegion region)
+		{
+			TableView.ReloadSections (NSIndexSet.FromIndex (0), UITableViewRowAnimation.Automatic);
+		}
+
+		public void MonitoringStarted (CLRegion region)
 		{
 			var indicator = new UIActivityIndicatorView (UIActivityIndicatorViewStyle.Gray);
 			indicator.StartAnimating ();
@@ -89,16 +94,19 @@ namespace FindTheMonkey
 			NavigationItem.RightBarButtonItem = new UIBarButtonItem (indicator);
 		}
 
-		private void HandleBeaconsUpdated (object sender, EventArgs e)
+		public void MonitoringFailed ()
 		{
-			TableView.ReloadSections (NSIndexSet.FromIndex (0), UITableViewRowAnimation.Automatic);
+			NavigationItem.RightBarButtonItem = null;
 		}
 
-		private void HandleBeaconUpdated (object sender, int index)
+		public void RegionEnetered (CLRegion region, CLRegion previous)
 		{
-			TableView.ReloadRows (new [] { NSIndexPath.FromRowSection (index, 0) }, UITableViewRowAnimation.Automatic);
-
-			ReloadNavigationTitle ();
+			if (region.Identifier != previous.Identifier) {
+				var notification = new UILocalNotification { AlertBody = "Welkom bij Freshheads!" };
+				UIApplication.SharedApplication.PresentLocalNotificationNow (notification);
+			}
 		}
+
+		#endregion
 	}
 }

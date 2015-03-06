@@ -1,6 +1,6 @@
 using System;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using Foundation;
+using UIKit;
 
 namespace FindTheMonkey
 {
@@ -13,8 +13,13 @@ namespace FindTheMonkey
 		public override UIWindow Window { get; set; }
 
 
-		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
+		public override bool FinishedLaunching (UIApplication application, NSDictionary launchOptions)
 		{
+			UIWindow.Appearance.BackgroundColor = UIColor.White;
+			UITabBarItem.Appearance.SetTitleTextAttributes (new UITextAttributes {
+				TextColor = UIColor.White
+			}, UIControlState.Normal);
+
 			return true;
 		}
 

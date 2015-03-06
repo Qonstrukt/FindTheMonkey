@@ -4,15 +4,15 @@
 // actions declared in your storyboard file.
 // Manual changes to this file will not be maintained.
 //
-using System;
 using Foundation;
-using UIKit;
+using System;
 using System.CodeDom.Compiler;
+using UIKit;
 
 namespace FindTheMonkey
 {
-	[Register ("BeaconsTableViewController")]
-	partial class BeaconsTableViewController
+	[Register ("DepartmentDetailPageViewController")]
+	partial class DepartmentDetailPageViewController
 	{
 		void ReleaseDesignerOutlets ()
 		{
