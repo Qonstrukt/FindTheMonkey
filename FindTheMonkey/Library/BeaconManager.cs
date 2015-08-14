@@ -1,98 +1,102 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using CoreLocation;
 using Foundation;
 
-namespace FindTheMonkey
+namespace Freshheads.SmartRoom.iOS
 {
 	public static class BeaconManager
 	{
-		private const string regionId = "fhBeacon";
-		private const string uuid = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
-
-		private static CLRegion lastRegion;
+		private static List<CLBeaconRegion> beaconRegions;
+		private static CLBeaconRegion currentRegion;
 		private static CLLocationManager locationManager;
-
-		public static Dictionary<string, CLBeacon> RangedBeacons { get; private set; }
 
 		public static IBeaconManagerDelegate Delegate { get; set; }
 
 
 		static BeaconManager ()
 		{
-			RangedBeacons = new Dictionary<string, CLBeacon> ();
-
+			beaconRegions = new List<CLBeaconRegion> ();
 			locationManager = new CLLocationManager ();
 
 			locationManager.RegionEntered += HandleRegionEntered;
+			locationManager.RegionLeft += HandleRegionLeft;
 			locationManager.DidRangeBeacons += HandleDidRangeBeacons;
-
 			locationManager.DidStartMonitoringForRegion += HandleDidStartMonitoringForRegion;
 			locationManager.MonitoringFailed += HandleMonitoringFailed;
 			locationManager.RangingBeaconsDidFailForRegion += HandleMonitoringFailed;
 
 			locationManager.RequestAlwaysAuthorization ();
 
-			var region = CreateBeaconRegion ();
-
-			switch (CLLocationManager.Status) {
-			case CLAuthorizationStatus.AuthorizedAlways:
-				locationManager.StartMonitoring (region);
-				locationManager.StartRangingBeacons (region);
-				break;
-
-			default:
+			if (CLLocationManager.Status == CLAuthorizationStatus.Denied) {
 				HandleMonitoringFailed (null, new EventArgs ());
-				break;
 			}
+
+			#if DEBUG
+//			RegisterBeaconRegion ("B9407F30-F5F8-466E-AFF9-25556B57FE6D", "Estimotes");
+//			RegisterBeaconRegion ("8492E75F-4FD6-469D-B132-043FE94921D8", "PhoneEstimotes");
+			#endif
 		}
 
-		private static CLBeaconRegion CreateBeaconRegion ()
+		public static void RegisterBeaconRegion (string uuid, ushort major, string regionId)
 		{
 			var NSUUID = new NSUuid (uuid);
-			var beaconRegion = new CLBeaconRegion (NSUUID, regionId);
+			var beaconRegion = new CLBeaconRegion (NSUUID, major, regionId);
 
 			beaconRegion.NotifyEntryStateOnDisplay = true;
 			beaconRegion.NotifyOnEntry = true;
 			beaconRegion.NotifyOnExit = true;
 
-			return beaconRegion;
+			locationManager.StartMonitoring (beaconRegion);
+			locationManager.StartRangingBeacons (beaconRegion);
+
+			beaconRegions.Add (beaconRegion);
 		}
 
 		private static void HandleRegionEntered (object sender, CLRegionEventArgs e)
 		{
-			Delegate.RegionEnetered (e.Region, lastRegion);
+			var beaconRegion = e.Region as CLBeaconRegion;
 
-			lastRegion = e.Region;
+			Delegate.RegionEnetered (beaconRegion, currentRegion);
+
+			currentRegion = beaconRegion;
+		}
+
+		static void HandleRegionLeft (object sender, CLRegionEventArgs e)
+		{
+			var beaconRegion = e.Region as CLBeaconRegion;
+
+			if (currentRegion == null || currentRegion.Identifier != beaconRegion.Identifier)
+				return;
+			
+			Delegate.RegionLeft (beaconRegion);
+
+			currentRegion = null;
 		}
 
 		private static void HandleDidRangeBeacons (object sender, CLRegionBeaconsRangedEventArgs e)
 		{
-			var beacons = new Dictionary<string, CLBeacon> ();
+			var beacons = e.Beacons.OrderBy (OrderByProximity).ToArray ();
 
-			foreach (var beacon in e.Beacons) {
-				var id = beacon.Minor.ToString ();
-
-				beacons.Add (id, beacon);
-
-				RangedBeacons = beacons.OrderBy (obj => {
-					return obj.Value.Proximity == CLProximity.Unknown ? 4 : (int)obj.Value.Proximity;
-				}).ToDictionary (obj => obj.Key, obj => obj.Value);
-
-				Delegate.BeaconsRanged (e.Beacons, e.Region);
-			}
+			Delegate.BeaconsRanged (beacons, e.Region);
 		}
 
 		private static void HandleDidStartMonitoringForRegion (object sender, CLRegionEventArgs e)
 		{
-			Delegate.MonitoringStarted (e.Region);
+			var beaconRegion = e.Region as CLBeaconRegion;
+
+			Delegate.MonitoringStarted (beaconRegion);
 		}
 
 		private static void HandleMonitoringFailed (object sender, EventArgs e)
 		{
 			Delegate.MonitoringFailed ();
+		}
+
+		public static int OrderByProximity (CLBeacon obj)
+		{
+			return obj.Proximity == CLProximity.Unknown ? 4 : (int)obj.Proximity;
 		}
 	}
 }

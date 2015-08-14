@@ -9,7 +9,7 @@ using Foundation;
 using UIKit;
 using System.CodeDom.Compiler;
 
-namespace FindTheMonkey
+namespace Freshheads.SmartRoom.iOS
 {
 	[Register ("BeaconsTableViewController")]
 	partial class BeaconsTableViewController

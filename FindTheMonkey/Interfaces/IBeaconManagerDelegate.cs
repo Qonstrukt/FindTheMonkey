@@ -1,17 +1,19 @@
 ﻿using System;
 using CoreLocation;
 
-namespace FindTheMonkey
+namespace Freshheads.SmartRoom.iOS
 {
 	public interface IBeaconManagerDelegate
 	{
 		void BeaconsRanged (CLBeacon[] beacons, CLBeaconRegion region);
 
-		void MonitoringStarted (CLRegion region);
+		void MonitoringStarted (CLBeaconRegion region);
 
 		void MonitoringFailed ();
 
-		void RegionEnetered (CLRegion region, CLRegion previous);
+		void RegionEnetered (CLBeaconRegion region, CLBeaconRegion previous);
+
+		void RegionLeft (CLBeaconRegion region);
 	}
 }
 

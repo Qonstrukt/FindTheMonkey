@@ -4,7 +4,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
-namespace FindTheMonkey
+namespace Freshheads.SmartRoom.iOS
 {
 	public class Application
 	{
