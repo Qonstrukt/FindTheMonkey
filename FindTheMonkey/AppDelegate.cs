@@ -2,6 +2,7 @@ using System;
 using Foundation;
 using Refit;
 using UIKit;
+using Freshheads.Library.iOS.Extensions;
 
 namespace Freshheads.SmartRoom.iOS
 {
@@ -65,13 +66,54 @@ namespace Freshheads.SmartRoom.iOS
 				break;
 			}
 
-			completionHandler.Invoke ();
+			if (completionHandler != null)
+				completionHandler.Invoke ();
 		}
 
-		public override void ReceivedLocalNotification (UIApplication application, UILocalNotification notification)
+		public override async void ReceivedLocalNotification (UIApplication application, UILocalNotification notification)
 		{
-			if (application.ApplicationState == UIApplicationState.Active)
-				new UIAlertView ("SmartRoom", notification.AlertBody, null, "OK", null).Show ();
+			if (application.ApplicationState == UIApplicationState.Background)
+				return;
+
+			string actionIdentifier = null;
+			string[] choices;
+			nint choice;
+
+			switch (notification.Category) {
+			case SwitchRoomCategory:
+				choices = new [] { "Zet lampen uit en aan", "Zet lampen aan", "Zet lampen uit" };
+				choice = await new UIAlertView ("SmartRoom", notification.AlertBody, null, "Negeren", choices).ShowAsync ();
+				switch (choice) {
+				case 1:
+					actionIdentifier = LightsOnIdentifier;
+					break;
+
+				case 2:
+					actionIdentifier = LightsOffIdentifier;
+					break;
+
+				case 3:
+					actionIdentifier = LightsSwitchIdentifier;
+					break;
+				}
+				break;
+
+			case EnterRoomCategory:
+				choices = new [] { "Zet lampen aan" };
+				choice = await new UIAlertView ("SmartRoom", notification.AlertBody, null, "Negeren", choices).ShowAsync ();
+				if (choice == 1)
+					actionIdentifier = LightsOnIdentifier;
+				break;
+
+			case LeftRoomCategory:
+				choices = new [] { "Zet lampen uit" };
+				choice = await new UIAlertView ("SmartRoom", notification.AlertBody, null, "Negeren", choices).ShowAsync ();
+				if (choice == 1)
+					actionIdentifier = LightsOffIdentifier;
+				break;
+			}
+
+			HandleAction (application, actionIdentifier, notification, null);
 		}
 
 		protected void RegisterNotifications (UIApplication application)
